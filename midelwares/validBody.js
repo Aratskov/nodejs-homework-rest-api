@@ -3,6 +3,7 @@ const { HttpError } = require("../helpers");
 const valideBody = (schema) => {
   const func = (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
+      if (req.originalUrl.includes('/favorite')) next(HttpError(400, "missing fields favorite"));
       next(HttpError(400, "missing fields"));
     }
 
