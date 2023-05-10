@@ -19,6 +19,15 @@ const userSchema = new Schema(
       type: String,
       require: true,
     },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter"
+    },
+    token: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -44,4 +53,3 @@ const schemas = {
 const User = model("user", userSchema);
 
 module.exports = { User, schemas };
- 
