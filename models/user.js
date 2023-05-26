@@ -6,18 +6,15 @@ const { handleMoongoseError } = require("../helpers/index");
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      require: true,
-    },
     email: {
       type: String,
+      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       unique: true,
-      require: true,
+      required: [true, 'Email is required'],
     },
     password: {
       type: String,
-      require: true,
+      required: [true, 'Set password for user'],
     },
     subscription: {
       type: String,
@@ -34,20 +31,13 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMoongoseError);
 
-const registerSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
-
-const loginSchema = Joi.object({
+const universalSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
 
 const schemas = {
-  registerSchema,
-  loginSchema,
+  universalSchema,
 };
 
 const User = model("user", userSchema);

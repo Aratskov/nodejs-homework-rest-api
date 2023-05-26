@@ -25,6 +25,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const { subscription } = user;
   if (!user) throw HttpError(401, "Email or password invalid");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -37,20 +38,26 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({ token });
+  res.json({ token, user: { email, subscription } });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({
+  res.status(204).json({
     message: "Logout success",
   });
+};
+
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
 };
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
+  getCurrent: ctrlWrapper(getCurrent),
 };
