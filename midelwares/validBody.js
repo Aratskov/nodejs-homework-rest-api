@@ -6,7 +6,6 @@ const valideBody = (schema) => {
 
     if (Object.keys(req.body).length === 0) {
       if (req.method === "PATCH") next(HttpError(400, `missing fields favorite`));
-
       next(HttpError(400, "missing fields"));
     }
 
