@@ -16,28 +16,29 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
-  res.status(201).json({
+  res.status(201).json({"user":{
     email: newUser.email,
     subscription: newUser.subscription,
-  });
+  }});
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const { subscription } = user;
-  if (!user) throw HttpError(401, "Email or password invalid");
-
+  if (!user) throw HttpError(401, "Email or password is wrong");
+  
   const passwordCompare = await bcrypt.compare(password, user.password);
-  if (!passwordCompare) throw HttpError(401, "Email or password invalid");
-
+  if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
+  
   const payload = {
     id: user._id,
   };
-
+  
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
-
+ 
+  const { subscription } = user;
+  
   res.json({ token, user: { email, subscription } });
 };
 
