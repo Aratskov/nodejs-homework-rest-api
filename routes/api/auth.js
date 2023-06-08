@@ -8,10 +8,16 @@ const {
   login,
   logout,
   getCurrent,
-  updateAvatar
+  updateAvatar,
+  verifyEmail,
+  resendVerify,
 } = require("../../controllers/auth");
 
 router.post("/register", validBody(schemas.universalSchema), register);
+
+router.get("/verify/:verificationToken", verifyEmail);
+router.post("/verify", validBody(schemas.emailSchema), resendVerify);
+
 router.post("/login", validBody(schemas.universalSchema), login);
 router.post("/logout", authenticate, logout);
 router.get("/current", authenticate, getCurrent);
