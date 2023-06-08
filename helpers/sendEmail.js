@@ -2,20 +2,20 @@ const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
-const { ETHEREAL_PASS } = process.env;
+const { ETHEREAL_PASS, ETHEREAL_LOGIN } = process.env;
 
 const nodemailerConfig = {
   host: "smtp.ethereal.email",
   port: 587,
   auth: {
-    user: "lucio.kunze90@ethereal.email",
+    user: ETHEREAL_LOGIN,
     pass: ETHEREAL_PASS,
   },
 };
 
 const sendEmail = async (data) => {
   const transport = nodemailer.createTransport(nodemailerConfig);
-  const email = { ...data, from: "lucio.kunze90@ethereal.email" };
+  const email = { ...data, from: ETHEREAL_LOGIN };
   await transport.sendMail(email);
   return true;
 };
