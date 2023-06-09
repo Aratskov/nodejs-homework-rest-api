@@ -10,25 +10,33 @@ const userSchema = new Schema(
       type: String,
       match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       unique: true,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
     },
     password: {
       type: String,
-      required: [true, 'Set password for user'],
+      required: [true, "Set password for user"],
     },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
-      default: "starter"
+      default: "starter",
     },
     token: {
       type: String,
       default: "",
     },
-    avatarURL:{
+    avatarURL: {
       type: String,
-      required:true
-    }
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -40,8 +48,13 @@ const universalSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().required()
+})
+
 const schemas = {
   universalSchema,
+  emailSchema
 };
 
 const User = model("user", userSchema);
