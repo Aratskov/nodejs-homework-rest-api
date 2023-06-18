@@ -21,6 +21,6 @@ router.post("/verify", validBody(schemas.emailSchema), resendVerify);
 router.post("/login", validBody(schemas.universalSchema), login);
 router.post("/logout", authenticate, logout);
 router.get("/current", authenticate, getCurrent);
-router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar1);
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
